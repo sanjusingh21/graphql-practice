@@ -1,19 +1,19 @@
 import { gql } from "apollo-server";
 {
   /* 
-    1. id: ID! : indicates mandetory field
+    1. _id: ID! : indicates mandetory field
     */
 }
 export const typeDefs = gql`
   type Query {
     users: [User]
     quotes: [Quote]
-    user(id: ID!): User
+    user(_id: ID!): User
     iQuote(by: ID!): [Quote]
   }
 
   type User {
-    id: ID!
+    _id: ID!
     firstName: String
     lastName: String
     email: String
@@ -26,13 +26,23 @@ export const typeDefs = gql`
     by: ID
   }
 
+  type Token {
+    token: String
+  }
+
   type Mutation {
-    signupUserDummy(newUser: UserInput!): User
+    signupUser(newUser: UserInput!): User
+    signinUser(userSignin: UserSigninInput!): Token
   }
 
   input UserInput {
     firstName: String!
     lastName: String!
+    email: String!
+    password: String!
+  }
+
+  input UserSigninInput {
     email: String!
     password: String!
   }

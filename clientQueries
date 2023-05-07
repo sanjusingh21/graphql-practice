@@ -1,7 +1,7 @@
 # Write your query or mutation here
-query getAllUsers{
-  users{
-    id
+query getAllUsers {
+  users {
+    _id
     firstName
     lastName
     email
@@ -10,8 +10,8 @@ query getAllUsers{
 
 #####################################################################
 
-query getAllQuotes{
-  quotes{
+query getAllQuotes {
+  quotes {
     name
     by
   }
@@ -19,24 +19,24 @@ query getAllQuotes{
 
 #####################################################################
 
-query getAllUsersWithQuotes{
-  users{
-    id
+query getAllUsersWithQuotes {
+  users {
+    _id
     firstName
     lastName
     email
-    quotes{
-    	name
+    quotes {
+      name
       by
-  	}
+    }
   }
 }
 
 #####################################################################
 
-query getUserByID{
-  user(id:"23131"){
-    id
+query getUserByID {
+  user(_id:"23131") {
+    _id
     firstName
     lastName
     email
@@ -45,8 +45,8 @@ query getUserByID{
 
 #####################################################################
 
-query getQuoteByUser{
-	iQuote(by:"23131"){
+query getQuoteByUser {
+  iQuote(by:"23131") {
     by
     name
   }
@@ -55,9 +55,9 @@ query getQuoteByUser{
 #####################################################################
 
 # with variable
-query getUserByID($userID:ID!){
-  user(id:$userID){
-    id
+query getUserByID($userID:ID!) {
+  user(_id:$userID) {
+    _id
     firstName
     lastName
     email
@@ -72,8 +72,8 @@ query getUserByID($userID:ID!){
 #####################################################################
 
 # with variable
-query getQuoteByUser($quoteBy:ID!){
-	iQuote(by:$quoteBy){
+query getQuoteByUser($quoteBy:ID!) {
+  iQuote(by:$quoteBy) {
     by
     name
   }
@@ -81,14 +81,14 @@ query getQuoteByUser($quoteBy:ID!){
 
 #at bottom in query variables section
 {
-   "quoteBy": "23131"
+  "quoteBy": "23131"
 }
 
 #####################################################################
 
-mutation{
-  signupUserDummy(firstName:"Ramesh",lastName:"Mathur",email:"ramesh@gmail.com",password:"1234"){
-    id
+mutation {
+  signupUserDummy(firstName:"Ramesh", lastName:"Mathur", email:"ramesh@gmail.com", password:"1234") {
+    _id
     firstName
     lastName
     email
@@ -98,9 +98,9 @@ mutation{
 #####################################################################
 
 # with variable
-mutation createUser($newUser:UserInput!){
-  signupUserDummy(newUser: $newUser){
-    id
+mutation createUser($newUser:UserInput!) {
+  signupUserDummy(newUser: $newUser) {
+    _id
     firstName
     lastName
     email
@@ -109,9 +109,9 @@ mutation createUser($newUser:UserInput!){
 
 (or)
 
-mutation createUser($newUser:UserInput!){
-  user:signupUserDummy(newUser: $newUser){ // here user is the alias name for signupUserDummy
-    id
+mutation createUser($newUser:UserInput!) {
+  user:signupUserDummy(newUser: $newUser) { // here user is the alias name for signupUserDummy
+    _id
     firstName
     lastName
     email

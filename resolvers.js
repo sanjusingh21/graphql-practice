@@ -1,11 +1,16 @@
 import { quotes, users } from "./api/fakeDB.js";
-import { randomBytes } from "crypto";
+import mongoose from "mongoose";
+const User = mongoose.model("User");
+import bcrypt from "bcryptjs";
+import jwt from "jsonwebtoken";
+import { JWT_SECRET } from "./config.js";
+
 export const resolvers = {
   Query: {
     users: () => users,
     quotes: () => quotes,
-    user: (_, { id }) => {
-      return users.find((user) => user.id === id);
+    user: (_, { _id }) => {
+      return users.find((user) => user._id === _id);
     },
     iQuote: (_, { by }) => {
       return quotes.filter((quote) => quote.by === by);
@@ -13,17 +18,43 @@ export const resolvers = {
   },
   User: {
     quotes: (user) /* (parents,{passedArguments})  */ => {
-      return quotes.filter((quote) => quote.by === user.id);
+      return quotes.filter((quote) => quote.by === user._id);
     },
   },
   Mutation: {
-    signupUserDummy: (_, { newUser }) => {
-      const id = randomBytes(5).toString("hex");
-      users.push({
-        id,
+    signupUser: async (_, { newUser }) => {
+      const user = await User.findOne({ email: newUser.email });
+      if (user) {
+        throw new Error("User already exists with these email");
+      }
+      const hashedPassword = await bcrypt.hash(newUser.password, 12);
+
+      const createdUser = new User({
         ...newUser,
+        password: hashedPassword,
       });
-      return users.find((user) => user.id === id);
+
+      return await createdUser.save();
+    },
+    signinUser: async (_, { userSignin }) => {
+      // TODO
+      const user = await User.findOne({ email: userSignin.email });
+      if (!user) {
+        throw new Error("User dosen't exist with these email");
+      }
+      const doMatch = await bcrypt.compare(userSignin.password, user.password);
+      if (!doMatch) {
+        throw new Error("email or password invalid!");
+      }
+
+      const token = jwt.sign(
+        {
+          userID: user._id,
+        },
+        JWT_SECRET
+      );
+
+      return { token };
     },
   },
 };
