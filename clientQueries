@@ -1,0 +1,131 @@
+# Write your query or mutation here
+query getAllUsers{
+  users{
+    id
+    firstName
+    lastName
+    email
+  }
+}
+
+#####################################################################
+
+query getAllQuotes{
+  quotes{
+    name
+    by
+  }
+}
+
+#####################################################################
+
+query getAllUsersWithQuotes{
+  users{
+    id
+    firstName
+    lastName
+    email
+    quotes{
+    	name
+      by
+  	}
+  }
+}
+
+#####################################################################
+
+query getUserByID{
+  user(id:"23131"){
+    id
+    firstName
+    lastName
+    email
+  }
+}
+
+#####################################################################
+
+query getQuoteByUser{
+	iQuote(by:"23131"){
+    by
+    name
+  }
+}
+
+#####################################################################
+
+# with variable
+query getUserByID($userID:ID!){
+  user(id:$userID){
+    id
+    firstName
+    lastName
+    email
+  }
+}
+
+#at bottom in query variables section
+{
+  "userID": "23131"
+}
+
+#####################################################################
+
+# with variable
+query getQuoteByUser($quoteBy:ID!){
+	iQuote(by:$quoteBy){
+    by
+    name
+  }
+}
+
+#at bottom in query variables section
+{
+   "quoteBy": "23131"
+}
+
+#####################################################################
+
+mutation{
+  signupUserDummy(firstName:"Ramesh",lastName:"Mathur",email:"ramesh@gmail.com",password:"1234"){
+    id
+    firstName
+    lastName
+    email
+  }
+}
+
+#####################################################################
+
+# with variable
+mutation createUser($newUser:UserInput!){
+  signupUserDummy(newUser: $newUser){
+    id
+    firstName
+    lastName
+    email
+  }
+}
+
+(or)
+
+mutation createUser($newUser:UserInput!){
+  user:signupUserDummy(newUser: $newUser){ // here user is the alias name for signupUserDummy
+    id
+    firstName
+    lastName
+    email
+  }
+}
+
+#at bottom in query variables section
+{
+  "newUser": {
+    "firstName":"Ramesh",
+    "lastName":"Mathur",
+    "email":"ramesh@gmail.com",
+    "password":"1234"
+  }
+}
+
+#####################################################################
